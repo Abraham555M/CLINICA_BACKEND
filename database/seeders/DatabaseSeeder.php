@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             TipoServicioSeeder::class,
             PresentacionMedicamentoSeeder::class,
             PiezaDentalSeeder::class,
-            CondicionDentalSeeder::class,            
+            CondicionDentalSeeder::class,  
+            UnidadMedidaSeeder::class          
         ]);
     }
 }

@@ -17,7 +17,8 @@ class Medicamento extends Model
         'nom_medicamento',
         'con_medicamento',
         'est_medicamento',
-        'id_presentacion'
+        'id_presentacion',
+        'id_unidad_medida'
     ];
 
     protected $casts = [
@@ -29,8 +30,26 @@ class Medicamento extends Model
         return $this->belongsTo(PresentacionMedicamento::class, 'id_presentacion', 'id_presentacion');
     }
 
+    public function unidad_medida()
+    {
+        return $this->belongsTo(UnidadMedida::class, 'id_unidad_medida', 'id_unidad_medida');
+    }
+
     public function recetaDetalles()
     {
         return $this->hasMany(RecetaDetalle::class, 'id_medicamento', 'id_medicamento');
+    }
+
+    /**
+     * Metodos complementarios al controlador 
+     */
+    public function tieneRecetaMedica(){
+        return $this->recetaDetalles()
+                    ->exists();
+    }
+
+    public function puedeEliminarse(): bool
+    {
+        return !$this->tieneRecetaMedica();
     }
 }

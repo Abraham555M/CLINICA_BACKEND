@@ -21,6 +21,10 @@ return new class extends Migration
                 ->constrained(table: "presentacion_medicamento", column: "id_presentacion")
                 ->onDelete("cascade");
 
+            $table->foreignId("id_unidad_medida")
+                ->constrained(table: "unidad_medida", column: "id_unidad_medida")
+                ->onDelete("cascade");
+
             $table->softDeletes();
             $table->timestamps();
         });
