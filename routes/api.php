@@ -18,3 +18,12 @@ Route::prefix('/medicamento')->group(function(){
     Route::delete("/eliminar-medicamento/{id_medicamento}", [MedicamentoController::class, 'eliminarMedicamento']);
     Route::get("/select-medicamentos", [MedicamentoController::class, 'selectMedicamentos']);
 });
+
+Route::prefix('/servicio')->group(function(){
+    Route::get("/select-servicios", [ServicioController::class, 'selectServicios']);
+    Route::get("/listar-servicios", [ServicioController::class, 'listarServicios']);
+    Route::get("/obtener-servicio/{id_servicio}", [ServicioController::class, 'obtenerServicio']);
+    Route::post("/registrar-servicio", [ServicioController::class, 'registrarServicio']);
+    Route::put("/actualizar-servicio/{id_servicio}", [ServicioController::class, 'actualizarServicio']);
+    Route::delete("/eliminar-servicio/{id_servicio}", [ServicioController::class, 'eliminarServicio']);
+});

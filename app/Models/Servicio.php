@@ -41,4 +41,27 @@ class Servicio extends Model
     {
         return $this->hasMany(Reserva::class, 'id_servicio', 'id_servicio');
     }
+
+    public function procedimientoConsultas()
+    {
+        return $this->hasMany(ProcedimientoConsulta::class, 'id_servicio', 'id_servicio');
+    }
+
+    /**
+     * Metodos complementarios al controlador 
+     */
+    public function asignadoADoctor(): bool
+    {
+        return $this->servicioDoctores()->exists();
+    }
+
+    public function tieneReservas(): bool
+    {
+        return $this->reservas()->exists();
+    }
+
+    public function puedeEliminarse(): bool
+    {
+        return !$this->asignadoADoctor() && !$this->tieneReservas();
+    }
 }

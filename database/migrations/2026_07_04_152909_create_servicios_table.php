@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("nom_servicio");
             $table->string("des_servicio", 200)->nullable();
             $table->tinyInteger("dur_min_servicio"); // duracion en minutos
-            $table->decimal("prc_servicio");
+            $table->decimal("prc_servicio", 8, 2);
             $table->tinyInteger("est_servicio")->default(1);
 
             $table->foreignId("id_tipo_servicio")
