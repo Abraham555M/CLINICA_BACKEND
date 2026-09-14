@@ -11,6 +11,16 @@ use App\Http\Controllers\Api\ServicioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::prefix('/auth')->group(function(){
+    Route::post("/login", [AuthController::class, 'login']);
+    Route::post("/establecer-password", [AuthController::class, 'establecerPassword']);
+    Route::post("/recuperar-password", [AuthController::class, 'recuperarPassword']);
+    Route::post("/restablecer-password", [AuthController::class, 'restablecerPassword']);
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::post("/logout", [AuthController::class, 'logout']);
+    });
+});
+
 Route::prefix('/medicamento')->group(function(){
     Route::get("/listar-medicamentos", [MedicamentoController::class, 'listarMedicamentos']);
     Route::post("/registrar-medicamento", [MedicamentoController::class, 'registrarMedicamento']);
