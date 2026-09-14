@@ -37,3 +37,12 @@ Route::prefix('/servicio')->group(function(){
     Route::put("/actualizar-servicio/{id_servicio}", [ServicioController::class, 'actualizarServicio']);
     Route::delete("/eliminar-servicio/{id_servicio}", [ServicioController::class, 'eliminarServicio']);
 });
+
+Route::prefix('/configuracion')->group(function(){
+    Route::get("/select-rol", [ConfiguracionController::class, 'selectRol']);
+    Route::get("/select-genero", [ConfiguracionController::class, 'selectGenero']);
+    Route::get("/select-tipo-antecedente", [ConfiguracionController::class, 'selectTipoAntecedente']);
+    Route::get("/select-presentacion-medicamento", [ConfiguracionController::class, 'selectPresentacionMedicamento']);
+    Route::get("/select-tipo-servicio", [ConfiguracionController::class, 'selectTipoServicio']);
+    Route::get("/select-unidad-medida", [ConfiguracionController::class, 'selectUnidadMedida']);
+});
