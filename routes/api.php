@@ -1,18 +1,21 @@
 <?php
 
+use App\Http\Controllers\Api\AntecedenteMedicoController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ConfiguracionController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\HorarioController;
 use App\Http\Controllers\Api\MedicamentoController;
 use App\Http\Controllers\Api\PacienteController;
 use App\Http\Controllers\Api\ReservaController;
 use App\Http\Controllers\Api\ServicioController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/auth')->group(function(){
     Route::post("/login", [AuthController::class, 'login']);
+    Route::post("/registro-paciente", [AuthController::class, 'registroPaciente'])->middleware('throttle:10,1');
+    Route::post("/reenviar-activacion", [AuthController::class, 'reenviarActivacion'])->middleware('throttle:5,1');
     Route::post("/establecer-password", [AuthController::class, 'establecerPassword']);
     Route::post("/recuperar-password", [AuthController::class, 'recuperarPassword']);
     Route::post("/restablecer-password", [AuthController::class, 'restablecerPassword']);
@@ -45,4 +48,20 @@ Route::prefix('/configuracion')->group(function(){
     Route::get("/select-presentacion-medicamento", [ConfiguracionController::class, 'selectPresentacionMedicamento']);
     Route::get("/select-tipo-servicio", [ConfiguracionController::class, 'selectTipoServicio']);
     Route::get("/select-unidad-medida", [ConfiguracionController::class, 'selectUnidadMedida']);
+});
+
+Route::prefix('/paciente')->group(function(){
+    Route::get("/listar-pacientes", [PacienteController::class, 'listarPacientes']);
+    Route::get("/select-pacientes", [PacienteController::class, 'selectPacientes']);
+    Route::post("/registrar-paciente", [PacienteController::class, 'registrarPaciente']);
+    Route::get("/obtener-paciente/{id_paciente}", [PacienteController::class, 'obtenerPacientePorId']);
+    Route::put("/actualizar-paciente/{id_paciente}", [PacienteController::class, 'actualizarPaciente']);
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::get("/obtener-mi-perfil", [PacienteController::class, 'obtenerMiPerfil']);
+        Route::put("/actualizar-mi-perfil", [PacienteController::class, 'actualizarMiPerfil']);
+        Route::get("/mis-dependientes", [PacienteController::class, 'misDependientes']);
+        Route::post("/registrar-dependiente", [PacienteController::class, 'registrarDependiente']);
+        Route::put("/actualizar-dependiente/{id_paciente}", [PacienteController::class, 'actualizarDependiente']);
+        Route::patch("/desvincular-dependiente/{id_paciente}", [PacienteController::class, 'desvincularDependiente']);
+    });
 });

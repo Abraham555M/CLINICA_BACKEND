@@ -21,6 +21,11 @@ class User extends Authenticatable
 
     protected $primaryKey = 'id_usuario';
 
+    // Constantes de estado del usuario
+    public const ESTADO_PENDIENTE = 0; // Pendiente de activación de contraseña/correo
+    public const ESTADO_ACTIVO    = 1; // Usuario activo y operativo
+    public const ESTADO_INACTIVO  = 2; // Inactivado o suspendido administrativamente
+
     /**
      * Get the attributes that should be cast.
      *
@@ -29,8 +34,26 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'est_usuario' => 'boolean',
+            'est_usuario' => 'integer',
         ];
+    }
+
+    /**
+     * Functiones predefinidas.
+     */
+    public function isActivo(): bool
+    {
+        return $this->est_usuario === self::ESTADO_ACTIVO;
+    }
+
+    public function isPendiente(): bool
+    {
+        return $this->est_usuario === self::ESTADO_PENDIENTE;
+    }
+
+    public function isInactivo(): bool
+    {
+        return $this->est_usuario === self::ESTADO_INACTIVO;
     }
 
     public function getAuthPassword()
@@ -42,6 +65,10 @@ class User extends Authenticatable
     {
         return 'pas_usuario';
     }
+
+    /**
+     * Relaciones.
+     */
 
     public function rol()
     {
@@ -66,5 +93,18 @@ class User extends Authenticatable
     public function notificaciones()
     {
         return $this->hasMany(Notificacion::class, 'id_usuario', 'id_usuario');
+    }
+
+    /**
+     * Define el correo destino para las notificaciones.
+     */
+    public function routeNotificationForMail($notification = null): string
+    {
+        // Si es un dependiente con correo generado del sistema, notificar al titular responsable
+        if (str_ends_with($this->ema_usuario, '@clinica.local') && $this->paciente?->usuarioResponsable) {
+            return $this->paciente->usuarioResponsable->ema_usuario;
+        }
+
+        return $this->ema_usuario;
     }
 }

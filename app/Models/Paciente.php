@@ -13,11 +13,14 @@ class Paciente extends Model
     protected $fillable = [
         'tel_paciente',
         'fch_nac_paciente',
-        'id_usuario'
+        'sld_fav_paciente',
+        'id_usuario',
+        'id_usuario_responsable'
     ];
 
     protected $casts = [
         'fch_nac_paciente' => 'date',
+        'sld_fav_paciente' => 'decimal:2',
     ];
 
     public function usuario()
