@@ -74,3 +74,15 @@ Route::middleware('auth:sanctum')->prefix('/antecedente')->group(function(){
     Route::put("/actualizar-antecedente/{id_antecedente}", [AntecedenteMedicoController::class, 'actualizarAntecedente']);
     Route::delete("/eliminar-antecedente/{id_antecedente}", [AntecedenteMedicoController::class, 'eliminarAntecedente']);
 });
+
+Route::prefix('/doctor')->group(function(){
+    Route::get("/listar-doctores", [DoctorController::class, 'listarDoctores']);
+    Route::get("/select-doctores", [DoctorController::class, 'selectDoctores']);
+    Route::get("/obtener-doctor/{id_doctor}", [DoctorController::class, 'obtenerDoctorPorId']);
+    Route::post("/registrar-doctor", [DoctorController::class, 'registrarDoctor']);
+    Route::put("/actualizar-doctor/{id_doctor}", [DoctorController::class, 'actualizarDoctor']);
+    Route::delete("/eliminar-doctor/{id_doctor}", [DoctorController::class, 'eliminarDoctor']);
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::get("/obtener-mi-perfil", [DoctorController::class, 'obtenerMiPerfil']);
+    });
+});

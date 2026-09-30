@@ -16,6 +16,7 @@ class Doctor extends Model
     protected $fillable = [
         'cop_num_doctor',
         'bio_doctor',
+        'img_doctor',
         'id_usuario'
     ];
 
@@ -44,8 +45,27 @@ class Doctor extends Model
         return $this->hasMany(ServicioDoctor::class, 'id_doctor', 'id_doctor');
     }
 
+    public function servicios()
+    {
+        return $this->belongsToMany(Servicio::class, 'servicio_doctor', 'id_doctor', 'id_servicio')
+                    ->withTimestamps();
+    }
+
     public function reservas()
     {
         return $this->hasMany(Reserva::class, 'id_doctor', 'id_doctor');
+    }
+
+    // Métodos complementarios
+    public function tieneHorarioActivo(): bool
+    {
+        return $this->horariosAtencion()
+                    ->where('est_horario_atencion', true)
+                    ->exists();
+    }
+
+    public function puedeEliminarse(): bool
+    {
+        return !$this->tieneHorarioActivo();
     }
 }
