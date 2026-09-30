@@ -65,3 +65,12 @@ Route::prefix('/paciente')->group(function(){
         Route::patch("/desvincular-dependiente/{id_paciente}", [PacienteController::class, 'desvincularDependiente']);
     });
 });
+
+Route::middleware('auth:sanctum')->prefix('/antecedente')->group(function(){
+    Route::get("/mis-antecedentes", [AntecedenteMedicoController::class, 'misAntecedentes']);
+    Route::get("/listar-por-paciente/{id_paciente}", [AntecedenteMedicoController::class, 'listarPorPaciente']);
+    Route::get("/obtener-antecedente/{id_antecedente}", [AntecedenteMedicoController::class, 'obtenerAntecedente']);
+    Route::post("/registrar-antecedente", [AntecedenteMedicoController::class, 'registrarAntecedente']);
+    Route::put("/actualizar-antecedente/{id_antecedente}", [AntecedenteMedicoController::class, 'actualizarAntecedente']);
+    Route::delete("/eliminar-antecedente/{id_antecedente}", [AntecedenteMedicoController::class, 'eliminarAntecedente']);
+});
