@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ConfiguracionController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DoctorController;
+use App\Http\Controllers\Api\HorarioBloqueadoController;
 use App\Http\Controllers\Api\HorarioController;
 use App\Http\Controllers\Api\MedicamentoController;
 use App\Http\Controllers\Api\PacienteController;
@@ -85,4 +86,46 @@ Route::prefix('/doctor')->group(function(){
     Route::middleware('auth:sanctum')->group(function(){
         Route::get("/obtener-mi-perfil", [DoctorController::class, 'obtenerMiPerfil']);
     });
+});
+
+Route::prefix('/horario')->group(function(){
+    Route::get("/disponibilidad", [HorarioController::class, 'obtenerDisponibilidad']);
+    Route::get("/listar-horarios", [HorarioController::class, 'listarHorarios']);
+    Route::get("/listar-horarios-por-doctor/{id_doctor}", [HorarioController::class, 'listarHorarioPorDoctor']);
+    Route::get("/dias-laborables/{id_doctor}", [HorarioController::class, 'diasLaborablesDoctor']);
+    Route::get("/obtener-horario/{id_horario}", [HorarioController::class, 'obtenerHorarioPorID']);
+    Route::post("/registrar-horario", [HorarioController::class, 'registrarHorarioDoctor']);
+    Route::put("/actualizar-horario/{id_horario_atencion}", [HorarioController::class, 'actualizarHorarioDoctor']);
+    Route::patch("/cambiar-estado/{id_horario}", [HorarioController::class, 'cambiarEstadoHorario']);
+    Route::delete("/eliminar-horario-doctor/{id_horario}", [HorarioController::class, 'eliminarHorario']);
+    Route::post("/registrar-semana", [HorarioController::class, 'registrarSemanaDoctor']);
+    Route::post("/configurar-semana", [HorarioController::class, 'registrarSemanaDoctor']);
+    
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::get("/mis-horarios", [HorarioController::class, 'misHorarios']);
+    });
+});
+
+Route::prefix('/horario-bloqueado')->group(function(){
+    Route::get("/listar-por-doctor/{id_doctor}", [HorarioBloqueadoController::class, 'listarBloqueosPorDoctor']);
+    Route::post("/registrar-bloqueo-horario", [HorarioBloqueadoController::class, 'registrarBloqueoHorario']);
+    Route::delete("/eliminar-bloqueo/{id_bloqueo}", [HorarioBloqueadoController::class, 'eliminarHorarioBloqueo']);
+
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::get("/mis-horarios-bloqueados", [HorarioBloqueadoController::class, 'misHorariosBloqueados']);
+    });
+});
+
+Route::prefix('/reserva')->group(function(){
+    Route::get("/listar-reservas", [ReservaController::class, 'listarReservas']);
+    Route::post("/registrar-reserva", [ReservaController::class, 'registrarReserva']);
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::get("/mis-reservas", [ReservaController::class, 'misReservas']);
+        Route::put("/reprogramar-reserva/{id_reserva}", [ReservaController::class, 'reprogramarReserva']);
+        Route::patch("/cancelar-reserva/{id_reserva}", [ReservaController::class, 'cancelarReserva']);
+    });
+});
+
+Route::middleware('auth:sanctum')->prefix('/dashboard')->group(function(){
+    Route::get("/paciente", [DashboardController::class, 'dashboardPaciente']);
 });
